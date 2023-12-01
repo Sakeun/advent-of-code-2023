@@ -45,30 +45,27 @@ func Day1Part2() int {
 		for i, r := range val {
 			currNum := ""
 			switch {
-			case i+2 < len(val) && string(r) == "o" && val[i:i+3] == "one":
-				currNum = "1"
+			case string(r) == "o":
+				currNum = findNum("one", val[i:])
 			case string(r) == "t":
-				if i+2 < len(val) && val[i:i+3] == "two" {
-					currNum = "2"
-				} else if i+4 < len(val) && val[i:i+5] == "three" {
-					currNum = "3"
+				currNum = findNum("two", val[i:])
+				if currNum == "" {
+					currNum = findNum("three", val[i:])
 				}
 			case string(r) == "f":
-				if i+3 < len(val) && val[i:i+4] == "four" {
-					currNum = "4"
-				} else if i+3 < len(val) && val[i:i+4] == "five" {
-					currNum = "5"
+				currNum = findNum("four", val[i:])
+				if currNum == "" {
+					currNum = findNum("five", val[i:])
 				}
 			case string(r) == "s":
-				if i+4 < len(val) && val[i:i+5] == "seven" {
-					currNum = "7"
-				} else if i+2 < len(val) && val[i:i+3] == "six" {
-					currNum = "6"
+				currNum = findNum("six", val[i:])
+				if currNum == "" {
+					currNum = findNum("seven", val[i:])
 				}
-			case i+4 < len(val) && string(r) == "e" && val[i:i+5] == "eight":
-				currNum = "8"
-			case i+3 < len(val) && string(r) == "n" && val[i:i+4] == "nine":
-				currNum = "9"
+			case string(r) == "e":
+				currNum = findNum("eight", val[i:])
+			case string(r) == "n":
+				currNum = findNum("nine", val[i:])
 			case r > 48 && r <= 57:
 				currNum = string(r)
 			}
@@ -97,4 +94,22 @@ func getInput() []byte {
 		log.Fatal(err)
 	}
 	return content
+}
+
+func findNum(num string, val string) string {
+	vals := map[string]string{
+		"one":   "1",
+		"two":   "2",
+		"three": "3",
+		"four":  "4",
+		"five":  "5",
+		"six":   "6",
+		"seven": "7",
+		"eight": "8",
+		"nine":  "9",
+	}
+	if len(num)-1 < len(val) && val[:len(num)] == num {
+		return vals[num]
+	}
+	return ""
 }
