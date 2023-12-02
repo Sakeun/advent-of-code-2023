@@ -2,7 +2,6 @@ package week1
 
 import (
 	"log"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -13,7 +12,7 @@ var sum int
 
 func Day1Part1() int {
 	sum, firstNum, secondNum = 0, "", ""
-	content := getInput()
+	content := getInput("inputDay1.txt")
 	for _, val := range string(content) {
 		if val > 48 && val <= 57 {
 			if firstNum == "" {
@@ -39,7 +38,7 @@ func Day1Part1() int {
 
 func Day1Part2() int {
 	sum, firstNum, secondNum = 0, "", ""
-	content := getInput()
+	content := getInput("inputDay1.txt")
 	arr := strings.Fields(string(content))
 	for _, val := range arr {
 		for i, r := range val {
@@ -86,14 +85,6 @@ func Day1Part2() int {
 	}
 
 	return sum
-}
-
-func getInput() []byte {
-	content, err := os.ReadFile("input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	return content
 }
 
 func findNum(num string, val string) string {
