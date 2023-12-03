@@ -11,40 +11,26 @@ func Day2Part1() int {
 	firstNum, secondNum, sum = "", "", 0
 	file := getInput("inputDay2.txt")
 	arr := strings.Split(string(file), "\n")
-	for j, val := range arr {
-		var red, green, blue, game int
-		for i, c := range val {
-			if string(c) == ";" {
-				red, green, blue = 0, 0, 0
-				continue
-			}
-			if c > 48 && c <= 57 && firstNum == "" {
-				firstNum = string(c)
-				continue
-			}
-			if c >= 48 && c <= 57 {
-				secondNum = string(c)
-				continue
-			}
-			if string(c) == ":" {
-				game = getNum(firstNum, secondNum)
-				if j == 99 {
-					game += 90
+	for _, val := range arr[:len(arr)-1] {
+		var game int
+		gameId, gameSets, _ := strings.Cut(val, ": ")
+		game, _ = strconv.Atoi(strings.Fields(gameId)[1])
+
+		for _, allRounds := range strings.Split(gameSets, "; ") {
+			rounds := strings.Split(allRounds, ", ")
+			var red, blue, green int
+
+			for _, picks := range rounds {
+				color := strings.Split(picks, " ")
+				currGame, _ := strconv.Atoi(color[0])
+				switch color[1] {
+				case "red":
+					red += currGame
+				case "green":
+					green += currGame
+				case "blue":
+					blue += currGame
 				}
-				firstNum, secondNum = "", ""
-				continue
-			}
-			if string(c) == "b" && val[i:i+4] == "blue" {
-				blue += getNum(firstNum, secondNum)
-				firstNum, secondNum = "", ""
-			}
-			if string(c) == "g" && val[i:i+5] == "green" {
-				green += getNum(firstNum, secondNum)
-				firstNum, secondNum = "", ""
-			}
-			if string(c) == "r" && val[i:i+3] == "red" {
-				red += getNum(firstNum, secondNum)
-				firstNum, secondNum = "", ""
 			}
 			if red > 12 || green > 13 || blue > 14 {
 				game = 0
@@ -63,49 +49,30 @@ func Day2Part2() int {
 	firstNum, secondNum, sum = "", "", 0
 	file := getInput("inputDay2.txt")
 	arr := strings.Split(string(file), "\n")
-	for _, val := range arr {
-		var red, green, blue, power int
-		for i, c := range val {
-			var num int
-			if c > 48 && c <= 57 && firstNum == "" {
-				firstNum = string(c)
-				continue
-			}
-			if c >= 48 && c <= 57 {
-				secondNum = string(c)
-				continue
-			}
-			if firstNum != "" {
-				num = getNum(firstNum, secondNum)
-			}
-			if string(c) == ":" {
-				firstNum, secondNum = "", ""
-				continue
-			}
-			if string(c) == "b" && val[i:i+4] == "blue" {
-				if num > blue {
-					blue = num
+	for _, val := range arr[:len(arr)-1] {
+		var red, blue, green int
+		_, gameSets, _ := strings.Cut(val, ": ")
+
+		for _, allRounds := range strings.Split(gameSets, "; ") {
+			rounds := strings.Split(allRounds, ", ")
+
+			for _, picks := range rounds {
+				color := strings.Split(picks, " ")
+				currGame, _ := strconv.Atoi(color[0])
+				switch {
+				case color[1] == "red" && currGame > red:
+					red = currGame
+				case color[1] == "green" && currGame > green:
+					green = currGame
+				case color[1] == "blue" && currGame > blue:
+					blue = currGame
 				}
-				firstNum, secondNum = "", ""
-			}
-			if string(c) == "g" && val[i:i+5] == "green" {
-				if num > green {
-					green = num
-				}
-				firstNum, secondNum = "", ""
-			}
-			if string(c) == "r" && val[i:i+3] == "red" {
-				if num > red {
-					red = num
-				}
-				firstNum, secondNum = "", ""
 			}
 		}
-		power = red * blue * green
-		sum += power
+		sum += red * blue * green
 		firstNum, secondNum = "", ""
 	}
-
+	
 	return sum
 }
 
