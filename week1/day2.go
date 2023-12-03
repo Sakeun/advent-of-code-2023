@@ -1,15 +1,13 @@
 package week1
 
 import (
-	"log"
-	"os"
 	"strconv"
 	"strings"
 )
 
 func Day2Part1() int {
 	firstNum, secondNum, sum = "", "", 0
-	file := getInput("inputDay2.txt")
+	file := getInput("week1/inputs/inputDay2.txt")
 	arr := strings.Split(string(file), "\n")
 	for _, val := range arr[:len(arr)-1] {
 		var game int
@@ -47,7 +45,7 @@ func Day2Part1() int {
 
 func Day2Part2() int {
 	firstNum, secondNum, sum = "", "", 0
-	file := getInput("inputDay2.txt")
+	file := getInput("week1/inputs/inputDay2.txt")
 	arr := strings.Split(string(file), "\n")
 	for _, val := range arr[:len(arr)-1] {
 		var red, blue, green int
@@ -72,23 +70,6 @@ func Day2Part2() int {
 		sum += red * blue * green
 		firstNum, secondNum = "", ""
 	}
-	
+
 	return sum
-}
-
-func getNum(first string, second string) int {
-	total := first + second
-	num, err := strconv.Atoi(total)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return num
-}
-
-func getInput(input string) []byte {
-	content, err := os.ReadFile(input)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return content
 }

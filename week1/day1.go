@@ -12,7 +12,7 @@ var sum int
 
 func Day1Part1() int {
 	sum, firstNum, secondNum = 0, "", ""
-	content := getInput("inputDay1.txt")
+	content := getInput("week1/inputs/inputDay1.txt")
 	for _, val := range string(content) {
 		if val > 48 && val <= 57 {
 			if firstNum == "" {
@@ -38,7 +38,7 @@ func Day1Part1() int {
 
 func Day1Part2() int {
 	sum, firstNum, secondNum = 0, "", ""
-	content := getInput("inputDay1.txt")
+	content := getInput("week1/inputs/inputDay1.txt")
 	arr := strings.Fields(string(content))
 	for _, val := range arr {
 		for i, r := range val {
