@@ -9,8 +9,7 @@ import (
 func Day2Part1() int {
 	firstNum, secondNum, sum = "", "", 0
 	file := common.GetInput("week1/inputs/inputDay2.txt")
-	arr := strings.Split(string(file), "\n")
-	for _, val := range arr[:len(arr)-1] {
+	for _, val := range file[:len(file)-1] {
 		var game int
 		gameId, gameSets, _ := strings.Cut(val, ": ")
 		game, _ = strconv.Atoi(strings.Fields(gameId)[1])
@@ -47,8 +46,7 @@ func Day2Part1() int {
 func Day2Part2() int {
 	firstNum, secondNum, sum = "", "", 0
 	file := common.GetInput("week1/inputs/inputDay2.txt")
-	arr := strings.Split(string(file), "\n")
-	for _, val := range arr[:len(arr)-1] {
+	for _, val := range file[:len(file)-1] {
 		var red, blue, green int
 		_, gameSets, _ := strings.Cut(val, ": ")
 

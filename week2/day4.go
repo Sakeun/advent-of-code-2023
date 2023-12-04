@@ -17,8 +17,7 @@ var example = "Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53\n" +
 func Day4Part1() int {
 	var sum int
 	input := common.GetInput("week2/inputs/inputDay4.txt")
-	cards := strings.Split(string(input), "\n")
-	for _, card := range cards {
+	for _, card := range input {
 		_, nums, _ := strings.Cut(card, ": ")
 		left, right, _ := strings.Cut(nums, " | ")
 		leftNumbers := strings.Fields(left)
@@ -45,9 +44,8 @@ func Day4Part2() int {
 	cardCount := make(map[int]int)
 	var sum int
 	input := common.GetInput("week2/inputs/inputDay4.txt")
-	cards := strings.Split(string(input), "\n")
-	cards = cards[:len(cards)-1]
-	for _, card := range cards {
+	input = input[:len(input)-1]
+	for _, card := range input {
 		cardNum, nums, _ := strings.Cut(card, ": ")
 		parsedNum, _ := strconv.Atoi(strings.Fields(cardNum)[1])
 		cardCount[parsedNum] += 1

@@ -3,21 +3,20 @@ package week1
 import (
 	"fmt"
 	"github.com/Sakeun/advent-of-code-2023/common"
+	"regexp"
 	"strconv"
-	"strings"
 )
 
 var str = "467..114..\n...*......\n..35..633.\n......#...\n617*......\n.....+.58.\n..592.....\n......755.\n...$.*....\n.664.598.."
 var charsMap = make(map[string]bool)
 
-// 549908
-
 func Day3Part1() int {
 	input := common.GetInput("week1/inputs/inputDay3.txt")
-	inputArr := strings.Split(string(input), "\n")
 	sum = 0
+	var num int
+	var surroundingNums []int
 	var sumGears int
-	matrix := createMatrix(inputArr)
+	matrix := createMatrix(input)
 
 	for i, row := range matrix {
 		if i == 0 || i == len(matrix)-1 {
@@ -29,12 +28,16 @@ func Day3Part1() int {
 				var err error
 				_, err = strconv.Atoi(matrix[i][j-1])
 				if err == nil {
-					sum += parseInt(matrix[i][j-3], matrix[i][j-2], matrix[i][j-1], true)
+					num = parseInt(matrix[i], j-3, true)
+					sum += num
+					surroundingNums = append(surroundingNums, num)
 				}
 
 				_, err = strconv.Atoi(matrix[i][j+1])
 				if err == nil {
-					sum += parseInt(matrix[i][j+1], matrix[i][j+2], matrix[i][j+3], false)
+					num = parseInt(matrix[i], j+1, false)
+					sum += num
+					surroundingNums = append(surroundingNums, num)
 				}
 
 				// top
@@ -56,11 +59,11 @@ func Day3Part1() int {
 func checkGear(top []string, mid []string, bot []string, j int) int {
 	var int1, int2 int
 	if _, err := strconv.Atoi(mid[j-1]); err == nil {
-		num := parseInt(mid[j-3], mid[j-2], mid[j-1], true)
+		num := parseInt(mid, j-3, true)
 		int1 = num
 	}
 	if _, err := strconv.Atoi(mid[j+1]); err == nil {
-		num := parseInt(mid[j+1], mid[j+2], mid[j+3], false)
+		num := parseInt(mid, j+1, false)
 		if int1 == 0 {
 			int1 = num
 		} else {
@@ -71,51 +74,32 @@ func checkGear(top []string, mid []string, bot []string, j int) int {
 	int1, int2 = checkGearRows(top, j, int1, int2)
 
 	int1, int2 = checkGearRows(bot, j, int1, int2)
-
 	return int1 * int2
 }
 
-func parseTB(a string, b string, c string, d string, e string) int {
-	returnVal := ""
-	if a != "." && !charsMap[a] {
-		returnVal += a
+func parseInt(row []string, i int, isLeft bool) int {
+	str := row[i] + row[i+1] + row[i+2]
+	re := regexp.MustCompile("[0-9]+")
+	nums := re.FindAllString(str, -1)
+
+	if !isLeft || len(nums) == 1 {
+		num, _ := strconv.Atoi(nums[0])
+		return num
 	}
-	if b != "." && !charsMap[b] {
-		returnVal += b
-	} else {
-		returnVal = ""
-	}
-	returnVal += c
-	if d != "." && !charsMap[d] {
-		returnVal += d
-		if e != "." && !charsMap[e] {
-			returnVal += e
-		}
-	}
-	num, _ := strconv.Atoi(returnVal)
+	num, _ := strconv.Atoi(nums[1])
 	return num
 }
 
-func parseInt(a string, b string, c string, isLeft bool) int {
-	returnVal := ""
-	if a != "." && !charsMap[a] {
-		returnVal += a
-	}
+func parseTB(row []string, i int) int {
+	str := row[i] + row[i+1] + row[i+2] + row[i+3] + row[i+4]
+	re := regexp.MustCompile("[0-9]+")
+	nums := re.FindAllString(str, -1)
 
-	if b != "." && !charsMap[b] {
-		returnVal += b
-	} else {
-		if !isLeft {
-			num, _ := strconv.Atoi(returnVal)
-			return num
-		}
-		returnVal = ""
+	if len(nums) == 1 || (row[i+3] == "." || charsMap[row[i+3]]) {
+		num, _ := strconv.Atoi(nums[0])
+		return num
 	}
-
-	if c != "." && !charsMap[c] {
-		returnVal += c
-	}
-	num, _ := strconv.Atoi(returnVal)
+	num, _ := strconv.Atoi(nums[1])
 	return num
 }
 
@@ -124,7 +108,7 @@ func checkGearRows(row []string, i int, a int, b int) (int, int) {
 		if a != 0 && b != 0 {
 			return 0, 0
 		}
-		num := parseTB(row[i-2], row[i-1], row[i], row[i+1], row[i+2])
+		num := parseTB(row, i-2)
 		if a == 0 {
 			a = num
 		} else {
@@ -135,7 +119,7 @@ func checkGearRows(row []string, i int, a int, b int) (int, int) {
 			if a != 0 && b != 0 {
 				return 0, 0
 			}
-			num := parseInt(row[i+1], row[i+2], row[i+3], false)
+			num := parseInt(row, i+1, false)
 			if a == 0 {
 				a = num
 			} else {
@@ -146,7 +130,7 @@ func checkGearRows(row []string, i int, a int, b int) (int, int) {
 			if a != 0 && b != 0 {
 				return 0, 0
 			}
-			num := parseInt(row[i-3], row[i-2], row[i-1], true)
+			num := parseInt(row, i-3, true)
 			if a == 0 {
 				a = num
 			} else {
@@ -154,20 +138,21 @@ func checkGearRows(row []string, i int, a int, b int) (int, int) {
 			}
 		}
 	}
+
 	return a, b
 }
 
 func checkAround(row []string, i int) {
 	if _, err := strconv.Atoi(row[i]); err == nil {
-		sum += parseTB(row[i-2], row[i-1], row[i], row[i+1], row[i+2])
+		sum += parseTB(row, i-2)
 	} else {
 		_, err = strconv.Atoi(row[i-1])
 		if err == nil {
-			sum += parseInt(row[i-3], row[i-2], row[i-1], true)
+			sum += parseInt(row, i-3, true)
 		}
 		_, err = strconv.Atoi(row[i+1])
 		if err == nil {
-			sum += parseInt(row[i+1], row[i+2], row[i+3], false)
+			sum += parseInt(row, i+1, false)
 		}
 	}
 }

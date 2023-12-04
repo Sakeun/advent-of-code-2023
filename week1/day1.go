@@ -3,8 +3,8 @@ package week1
 import (
 	"github.com/Sakeun/advent-of-code-2023/common"
 	"log"
+	"os"
 	"strconv"
-	"strings"
 )
 
 var firstNum string
@@ -13,8 +13,8 @@ var sum int
 
 func Day1Part1() int {
 	sum, firstNum, secondNum = 0, "", ""
-	content := common.GetInput("week1/inputs/inputDay1.txt")
-	for _, val := range string(content) {
+	content, _ := os.ReadFile("week1/inputs/inputDay1.txt")
+	for _, val := range content {
 		if val > 48 && val <= 57 {
 			if firstNum == "" {
 				firstNum = string(val)
@@ -40,8 +40,8 @@ func Day1Part1() int {
 func Day1Part2() int {
 	sum, firstNum, secondNum = 0, "", ""
 	content := common.GetInput("week1/inputs/inputDay1.txt")
-	arr := strings.Fields(string(content))
-	for _, val := range arr {
+	content = content[:len(content)-1]
+	for _, val := range content {
 		for i, r := range val {
 			currNum := ""
 			switch {

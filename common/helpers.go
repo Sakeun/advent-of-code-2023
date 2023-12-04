@@ -3,12 +3,14 @@ package common
 import (
 	"log"
 	"os"
+	"strings"
 )
 
-func GetInput(input string) []byte {
+func GetInput(input string) []string {
 	content, err := os.ReadFile(input)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return content
+	inputArr := strings.Split(string(content), "\n")
+	return inputArr
 }
