@@ -44,7 +44,7 @@ func Day3Part1() int {
 				checkAround(matrix[i+1], j)
 
 				if field == "*" {
-					sumGears += checkGear(matrix[i-1], matrix[i], matrix[i+1], charsMap, j)
+					sumGears += checkGear(matrix[i-1], matrix[i], matrix[i+1], j)
 				}
 			}
 		}
@@ -53,7 +53,7 @@ func Day3Part1() int {
 	return sum
 }
 
-func checkGear(top []string, mid []string, bot []string, chars map[string]bool, j int) int {
+func checkGear(top []string, mid []string, bot []string, j int) int {
 	var int1, int2 int
 	if _, err := strconv.Atoi(mid[j-1]); err == nil {
 		num := parseInt(mid[j-3], mid[j-2], mid[j-1], true)
