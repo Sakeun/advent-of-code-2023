@@ -48,33 +48,11 @@ func Day3Part1() int {
 					sum += parseInt(matrix[i][j+1], matrix[i][j+2], matrix[i][j+3], false)
 				}
 
-				// top - Left top - Right top
-				if _, err = strconv.Atoi(matrix[i-1][j]); err == nil {
-					sum += parseTB(matrix[i-1][j-2], matrix[i-1][j-1], matrix[i-1][j], matrix[i-1][j+1], matrix[i-1][j+2])
-				} else {
-					_, err = strconv.Atoi(matrix[i-1][j-1])
-					if err == nil {
-						sum += parseInt(matrix[i-1][j-3], matrix[i-1][j-2], matrix[i-1][j-1], true)
-					}
-					_, err = strconv.Atoi(matrix[i-1][j+1])
-					if err == nil {
-						sum += parseInt(matrix[i-1][j+1], matrix[i-1][j+2], matrix[i-1][j+3], false)
-					}
-				}
+				// top
+				checkAround(matrix[i-1], j)
 
 				// Bottom, left bottom, right bottom
-				if _, err = strconv.Atoi(matrix[i+1][j]); err == nil {
-					sum += parseTB(matrix[i+1][j-2], matrix[i+1][j-1], matrix[i+1][j], matrix[i+1][j+1], matrix[i+1][j+2])
-				} else {
-					_, err = strconv.Atoi(matrix[i+1][j-1])
-					if err == nil {
-						sum += parseInt(matrix[i+1][j-3], matrix[i+1][j-2], matrix[i+1][j-1], true)
-					}
-					_, err = strconv.Atoi(matrix[i+1][j+1])
-					if err == nil {
-						sum += parseInt(matrix[i+1][j+1], matrix[i+1][j+2], matrix[i+1][j+3], false)
-					}
-				}
+				checkAround(matrix[i+1], j)
 
 				if field == "*" {
 					sumGears += checkGear(matrix[i-1], matrix[i], matrix[i+1], charsMap, j)
@@ -134,6 +112,7 @@ func parseInt(a string, b string, c string, isLeft bool) int {
 	if a != "." && !charsMap[a] {
 		returnVal += a
 	}
+
 	if b != "." && !charsMap[b] {
 		returnVal += b
 	} else {
@@ -143,6 +122,7 @@ func parseInt(a string, b string, c string, isLeft bool) int {
 		}
 		returnVal = ""
 	}
+
 	if c != "." && !charsMap[c] {
 		returnVal += c
 	}
@@ -186,4 +166,19 @@ func checkGearRows(row []string, i int, a int, b int) (int, int) {
 		}
 	}
 	return a, b
+}
+
+func checkAround(row []string, i int) {
+	if _, err := strconv.Atoi(row[i]); err == nil {
+		sum += parseTB(row[i-2], row[i-1], row[i], row[i+1], row[i+2])
+	} else {
+		_, err = strconv.Atoi(row[i-1])
+		if err == nil {
+			sum += parseInt(row[i-3], row[i-2], row[i-1], true)
+		}
+		_, err = strconv.Atoi(row[i+1])
+		if err == nil {
+			sum += parseInt(row[i+1], row[i+2], row[i+3], false)
+		}
+	}
 }
