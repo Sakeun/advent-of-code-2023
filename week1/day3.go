@@ -17,18 +17,7 @@ func Day3Part1() int {
 	inputArr := strings.Split(string(input), "\n")
 	sum = 0
 	var sumGears int
-	var matrix [][]string
-	for _, rows := range inputArr {
-		var row []string
-		for _, field := range rows {
-			strfield := string(field)
-			row = append(row, strfield)
-			if _, err := strconv.Atoi(strfield); err != nil && strfield != "." {
-				charsMap[strfield] = true
-			}
-		}
-		matrix = append(matrix, row)
-	}
+	matrix := createMatrix(inputArr)
 
 	for i, row := range matrix {
 		if i == 0 || i == len(matrix)-1 {
@@ -181,4 +170,20 @@ func checkAround(row []string, i int) {
 			sum += parseInt(row[i+1], row[i+2], row[i+3], false)
 		}
 	}
+}
+
+func createMatrix(input []string) [][]string {
+	var matrix [][]string
+	for _, rows := range input {
+		var row []string
+		for _, field := range rows {
+			strfield := string(field)
+			row = append(row, strfield)
+			if _, err := strconv.Atoi(strfield); err != nil && strfield != "." {
+				charsMap[strfield] = true
+			}
+		}
+		matrix = append(matrix, row)
+	}
+	return matrix
 }
