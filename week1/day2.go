@@ -1,13 +1,14 @@
 package week1
 
 import (
+	"github.com/Sakeun/advent-of-code-2023/common"
 	"strconv"
 	"strings"
 )
 
 func Day2Part1() int {
 	firstNum, secondNum, sum = "", "", 0
-	file := getInput("week1/inputs/inputDay2.txt")
+	file := common.GetInput("week1/inputs/inputDay2.txt")
 	arr := strings.Split(string(file), "\n")
 	for _, val := range arr[:len(arr)-1] {
 		var game int
@@ -45,7 +46,7 @@ func Day2Part1() int {
 
 func Day2Part2() int {
 	firstNum, secondNum, sum = "", "", 0
-	file := getInput("week1/inputs/inputDay2.txt")
+	file := common.GetInput("week1/inputs/inputDay2.txt")
 	arr := strings.Split(string(file), "\n")
 	for _, val := range arr[:len(arr)-1] {
 		var red, blue, green int

@@ -1,11 +1,11 @@
-package week1
+package common
 
 import (
 	"log"
 	"os"
 )
 
-func getInput(input string) []byte {
+func GetInput(input string) []byte {
 	content, err := os.ReadFile(input)
 	if err != nil {
 		log.Fatal(err)
